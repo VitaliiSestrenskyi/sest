@@ -1,5 +1,5 @@
 {
-    "name": "VitaliiSestrenskiy/sest",
+    "name": "vitaliisestrenskiy/sest",
     "description": "class for work with bitrix methods",
     "keywords": ["print_r", "var_dump", "debug", "pretty", "print", "dump"],
     "type": "library",
