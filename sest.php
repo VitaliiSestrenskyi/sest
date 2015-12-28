@@ -1,3 +1,4 @@
+<?php
 class sest{	
 		
 	function __construct($argument) {
@@ -159,3 +160,4 @@ class sest{
 
 	
 }//end class sest
+?>
