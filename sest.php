@@ -1,9 +1,8 @@
-<?php
+<?php 
 class sest{	
 		
 	function __construct($argument) {
-		//self::$site = $_SERVER['SERVER_NAME'];
-		//self::$fullUrl = $_SERVER['SERVER_NAME'] . $this->url();
+				
 	}
 		
 	/**
@@ -90,7 +89,16 @@ class sest{
 			return false;	
 	}
 	
-	
+	/**
+	 * checkGet() - check GET params 
+	 */
+	public static function checkGet( $arg ){
+		if ( isset($_GET[$arg]) && !empty($_GET[$arg]) )
+			return true;
+		else
+			return false;	
+	}
+		
 	
 	/**
 	 * getPropIDs() - get IDs by property code
@@ -109,6 +117,14 @@ class sest{
 		
 		return $arrIDs;
 	}
+	
+	/**
+	 * get filter for catalog, type is not list
+	 */
+	public static function getPropertyFilter( $propertyCode, $valuePropertyCode ){
+		return array('PROPERTY_'.$propertyCode => $valuePropertyCode );
+	}
+	
 	
 	
 	/**
@@ -157,6 +173,194 @@ class sest{
 	    		
 		return $arIDs;
 	}
+	
+	
+	/*
+	 * getCountIDsHL() - get count of ids products of current user
+	 * 
+	 * $idHL - id hightload block
+	 */
+	public static function getDataHLByXmlId( $idHL, $xmlId ){		
+		global $USER;
+	    CModule::IncludeModule("highloadblock"); 
+			    
+	    $hlbl = $idHL; 
+	    $hlblock = Bitrix\Highloadblock\HighloadBlockTable::getById($hlbl)->fetch(); 
+	    $entity = Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock); 
+	    $entity_data_class = $entity->getDataClass();   
+	    
+	    $rsData = $entity_data_class::getList(array(
+	       "select" => array("*"),
+	       "order" => array("ID" => "ASC"),
+	       "filter" => array('UF_XML_ID' => $xmlId)
+	    ));
+		$arReturn = array();
+	    while($arData = $rsData->Fetch()){
+	    	$arReturn[] = $arData;  
+	    }
+	       	
+		return $arReturn;
+	}
+	
+	
+	
+	/**
+	 * getSection() - get  section data 
+	 * $idBlock - IBLOCK_ID
+	 * $sectionId - section id - parent
+	 */
+	public static function getSection( $idBlock, $sectionId = false ){
+		$resDB = CIBlockSection::GetList( Array("SORT"=>"ASC"), Array('IBLOCK_ID'=>$idBlock, 'SECTION_ID'=>$sectionId), false, Array(), false );
+		
+		$rootSection = array();
+		while ( $resSections = $resDB->fetch() ) {			
+			$rootSection[] = $resSections;
+		}
+		
+		return $rootSection;
+	}
+	
+	
+	/**
+	 * getSection() - get  section data 
+	 * $idBlock - IBLOCK_ID
+	 * $sectionId - section id - parent
+	 * $sectionIdCurrent - section id
+	 */
+	public static function getCurrSection( $idBlock, $sectionId = false, $sectionIdCurrent = false ){
+		$resDB = CIBlockSection::GetList( Array("SORT"=>"ASC"), Array('IBLOCK_ID'=>$idBlock, 'SECTION_ID'=>$sectionId, 'ID'=>$sectionIdCurrent), false, Array(), false );
+		
+		$rootSection = array();
+		while ( $resSections = $resDB->fetch() ) {			
+			$rootSection[] = $resSections;
+		}
+		
+		return $rootSection;
+	}
+	
+	
+	/**
+	 * getAllDataHL() - get all data from HL
+	 * $hlblock - hightload block id
+	 */
+	public static function getAllDataHL( $hlblock ){
+		CModule::IncludeModule("highloadblock"); 			    
+	    $hlbl = $hlblock; 
+	    $hlblock = Bitrix\Highloadblock\HighloadBlockTable::getById($hlbl)->fetch(); 
+	    $entity = Bitrix\Highloadblock\HighloadBlockTable::compileEntity($hlblock); 
+	    $entity_data_class = $entity->getDataClass();   
+	    
+	    $rsData = $entity_data_class::getList(array(
+	       "select" => array("*"),
+	       "order" => array("ID" => "ASC")	      
+	    ));
+		global $arHLData;
+		$arHLData = array();
+		while ( $res = $rsData->fetch() ) {
+			$arHLData[] = $res;			
+		}
+		
+		return $arHLData;
+	}
+	
+	
+	/**
+	 * getDataElById() - get data from info block by Id of element. this will be only one row of result
+	 * $idBlock - IBLOCK_ID
+	 * $idElement - ID
+	 */
+	public static function getDataElById ( $idBlock, $idElement ){
+		if(CModule::IncludeModule("iblock")){
+			return	CIBlockElement::GetList( Array("SORT"=>"ASC"), Array('ID'=>$idElement, 'IBLOCK_ID'=>$idBlock), false, false, Array() )->fetch();
+		}
+	}
+	
+	
+	/**
+	 * getMinPriceSearchTitle() - get min price from array of SCU by product
+	 * $idBlock - IBLOCK_ID
+	 * $idElement - PROPERTY_CML2_LINK (this is ID of product from iblock of product)
+	 */
+	public static function getMinPriceSearchTitle( $idBlock, $idElement ){
+		if( CModule::IncludeModule("iblock") && CModule::IncludeModule("catalog") ){		
+			$resTorgPrDB  = CIBlockElement::GetList(Array("SORT"=>"ASC"), Array('IBLOCK_ID'=>$idBlock,'PROPERTY_CML2_LINK'=>$idElement), false,  false, Array());
+								
+			$arrAllScu = array();
+			while ( $resTorgPr = $resTorgPrDB->fetch() ) {
+				$arrAllScu[] = $resTorgPr;
+			}
+	
+			$arrAllScuPrices = array();						
+			foreach ($arrAllScu as $k => $val) {
+				$resTorgPrPrice = CPrice::GetList(array(), array('IBLOCK_ID'=>$idBlock, 'PRODUCT_ID'=>$val['ID']), false, false, array())->fetch();  
+				$arrAllScuPrices[ $resTorgPrPrice['PRICE'] ] = array('PRODUCT_ID'=>$resTorgPrPrice['PRODUCT_ID'], 'PRICE'=>$resTorgPrPrice['PRICE'], 'CURRENCY'=>$resTorgPrPrice['CURRENCY']);
+			}	
+			
+			ksort($arrAllScuPrices);
+			$index = 0;
+			$arrResScuMinPrice = array();
+			foreach ($arrAllScuPrices as $key => $value) {
+				if( $index == 0 ){
+					$arrResScuMinPrice[] = array('PRODUCT_ID'=>$value['PRODUCT_ID'], 'PRICE'=>$value['PRICE'], 'CURRENCY'=>$value['CURRENCY']);
+					$index += 1;
+				}else{
+					break;
+				}
+			}
+			
+			return $arrResScuMinPrice;	
+		}		
+	}
+	
+	
+	/**
+	 * getBrandFilter() - get ids for brand filter
+	 * $idBlock - IBLOCK_ID
+	 * $code - symb code
+	 * $brandXmlId - XML ID of hightload block
+	 */
+	public static function getBrandFilter ( $idBlock, $code, $brandXmlId ){
+		$selectFiled = 'PROPERTY_' . $code;
+		$selectFiledValue = 'PROPERTY_' . $code . '_VALUE';
+
+		$resDB = CIBlockElement::GetList( Array("SORT"=>"ASC"), Array('IBLOCK_ID'=>IBLOCK_ID_PRODS), false, false, Array('ID', $selectFiled) );
+		$resIDs = array();
+		while ( $res = $resDB->fetch() ) {
+			if( ($res[$selectFiledValue] == $brandXmlId) ){
+				$resIDs[] = $res['ID'];	
+			}
+		}
+
+		return $resIDs;
+	}
+	
+	
+	/**
+	 * checkUrl() - fundtion of checkout of url string
+	 * 
+	 * $detString - symbol of seperation
+	 * $includeSymbol - symbol that include in url array
+	 * $countArUrl - count of element of url array
+	 */
+	public static function checkUrl ( $detString, $includeSymbol, $countArUrl ){
+		$cUrl  = sest::url();
+		$arUrl = explode($detString, $cUrl);
+		$includeVal = in_array($includeSymbol, $arUrl);
+		
+		if( $includeVal && count($arUrl) > $countArUrl )
+			return true;
+		else
+			return false;					
+	}
+	
+	
+	
+	
+	
+
+	
+	
+	
 
 	
 }//end class sest
