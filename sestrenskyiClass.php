@@ -1,5 +1,17 @@
 <?php
 class sest{	
+	function dd( $data, $exit = false ){
+	//global $USER;
+	//if ($USER->IsAdmin()){
+	    if($_SERVER['REMOTE_ADDR'] == '217.20.169.205') {
+	        echo "<pre style='background: #000000; color: gold; font-size: 14px;'>";
+	        print_r($data);
+	        echo "</pre>";
+	        if ($exit)
+	            exit;
+	    }
+		//}
+	}
 		
 	function __construct($argument) {
 		//self::$site = $_SERVER['SERVER_NAME'];
