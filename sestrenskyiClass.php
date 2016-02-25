@@ -43,8 +43,8 @@ class sest{
 	/**
 	 * get current url
 	 */
-	public static function url() {
-			  if (isset($_SERVER['REQUEST_URI'])) {
+	public static function url($full) {
+			 if (isset($_SERVER['REQUEST_URI'])) {
 			    $uri = $_SERVER['REQUEST_URI'];
 			  }
 			  else {
@@ -60,8 +60,23 @@ class sest{
 			  }
 			  // Prevent multiple slashes to avoid cross site requests via the FAPI.
 			  $uri = '/'. ltrim($uri, '/');
-			
-			  return $uri;
+			  
+			   
+			   
+			   $host = $_SERVER['HTTP_HOST'];
+		       if($_SERVER['SERVER_PORT'] <> 80 && $_SERVER['SERVER_PORT'] <> 443 && $_SERVER['SERVER_PORT'] > 0 && strpos($_SERVER['HTTP_HOST'], ":") === false)
+		       {
+		           $host .= ":".$_SERVER['SERVER_PORT'];
+		       }
+		
+		       $protocol = (CMain::IsHTTPS() ? "https" : "http");
+		
+			  
+			  if($full){
+			  	$uri =  $protocol."://".$_SERVER['SERVER_NAME']. $uri;
+			  }
+		
+	  return $uri;
 	}
 	
 	
