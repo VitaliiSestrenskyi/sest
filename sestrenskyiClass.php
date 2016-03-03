@@ -1,6 +1,6 @@
 <?php
 class sest{	
-	function dd( $data, $exit = false ){
+	public static function dd( $data, $exit = false ){
 	//global $USER;
 	//if ($USER->IsAdmin()){
 	    if($_SERVER['REMOTE_ADDR'] == '217.20.169.205') {
@@ -12,6 +12,24 @@ class sest{
 	    }
 		//}
 	}
+	
+	/**
+	 * @param array $array
+	 * @param $path
+	 * @param $filename
+	 */
+	public static function wd( $array=array(), $path, $filename ){
+	    $str = '';
+	    foreach($array as $key => $val){
+	        $str .= $key.'=>'.json_encode($val)."\n";
+	    }
+	
+	    file_put_contents($path . '/' . $filename, $str);
+	}
+	
+	
+	
+	
 		
 	function __construct($argument) {
 		//self::$site = $_SERVER['SERVER_NAME'];
