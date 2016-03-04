@@ -1,4 +1,5 @@
 <?php 
+http://failoverconf.ru/conf2016/
 CAgent::AddAgent("createSmartFilterSeoXML();");
 function createSmartFilterSeoXML(){
 	 if(CModule::IncludeModule("iblock")){
