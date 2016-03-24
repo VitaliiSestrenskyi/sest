@@ -391,6 +391,19 @@ class sest{
 			return false; 
 	}
 	
+	 /**
+	* recursive delete folder
+	* @param $dir
+	* @return bool
+	*/
+	public static function delFolder($dir){
+		$files = array_diff(scandir($dir), array('.','..'));
+		foreach ($files as $file) {
+		(is_dir("$dir/$file")) ? delFolder("$dir/$file") : unlink("$dir/$file");
+		}
+		return rmdir($dir);
+	}
+	
 	
 	
 }//end class sest    
