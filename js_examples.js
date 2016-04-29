@@ -8,8 +8,13 @@ document.addEventListener('DOMContentLoaded', function(){
 	};
 });
 
-elemsCollection = document.getElementsByClassName('buy-offers');
-for( var i=0; i < elemsCollection.length; i++  ){
-  elemsCollection[i].value = "1";
-  console.log( elemsCollection[i]  );
-}
+document.addEventListener("DOMContentLoaded", function (event) {     	
+	elemsCollection = document.getElementsByClassName('buy-offers');
+	for( var i=0; i < elemsCollection.length; i++  ){
+	  elemsCollection[i].value = "1";		 
+	}
+});
+
+
+
+
