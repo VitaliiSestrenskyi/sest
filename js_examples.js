@@ -7,3 +7,9 @@ document.addEventListener('DOMContentLoaded', function(){
 		paramsToModal.buyOneClick($(this)); 
 	};
 });
+
+elemsCollection = document.getElementsByClassName('buy-offers');
+for( var i=0; i < elemsCollection.length; i++  ){
+  elemsCollection[i].value = "1";
+  console.log( elemsCollection[i]  );
+}
