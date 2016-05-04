@@ -15,6 +15,17 @@ document.addEventListener("DOMContentLoaded", function (event) {
 	}
 });
 
+//сортировка option по значению
+$('.selected_box_RAZMER').each(function(){  
+	  selectOptions = $(this).find('option');
+	  selectOptions.sort(function(a,b){
+	      a = a.value;
+	      b = b.value;
+	
+	      return a-b;
+	  });
+	  $(this).html(selectOptions);
+});
 
 
 
