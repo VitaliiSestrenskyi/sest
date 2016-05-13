@@ -1,4 +1,5 @@
 <?
+// в модуле интернет-магазина нужно включить на стройку - "Использовать совместимость для просмотренных товаров каталога"
 $countViewedProducts = 0;
 		$GLOBALS['arViewedProducts'] = array();
 		if(\Bitrix\Main\Loader::includeModule("catalog") && \Bitrix\Main\Loader::includeModule("sale"))
