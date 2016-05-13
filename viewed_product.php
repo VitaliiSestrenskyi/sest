@@ -23,4 +23,5 @@ $countViewedProducts = 0;
 		      }
 		   }
 		}
+
 ?>
