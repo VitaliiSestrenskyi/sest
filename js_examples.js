@@ -27,5 +27,9 @@ $('.selected_box_RAZMER').each(function(){
 	  $(this).html(selectOptions);
 });
 
+//удаления дубликатов
+$("select option").val(function(i,v){
+  $(this).siblings("[value="+ v +"]").remove();
+});
 
 
