@@ -32,4 +32,8 @@ $("select option").val(function(i,v){
   $(this).siblings("[value="+ v +"]").remove();
 });
 
+//удаления дубликатов + замена 1 пробела на _
+$("select option").val(function(i,v){
+  $(this).siblings("[value="+ v.replace(/\s{1,}/g, '_') +"]").remove();
+});
 
