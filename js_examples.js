@@ -67,3 +67,15 @@ function UpdateQueryString(key, value, url) {
             return url;
     }
 }
+
+
+//удаление параметров с url
+function delPrm(Url,Prm) 
+{
+	var a=Url.split('?');
+	var re = new RegExp('(\\?|&)'+Prm+'=[^&]+','g');
+	Url=('?'+a[1]).replace(re,'');
+	Url=Url.replace(/^&|\?/,'');
+	var dlm=(Url=='')? '': '?';
+	return a[0]+dlm+Url;
+};
