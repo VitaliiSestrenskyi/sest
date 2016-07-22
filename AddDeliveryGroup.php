@@ -1,5 +1,5 @@
 <?php
-Добавление группы(есть подозрение):
+//Добавление группы(есть подозрение):
 use Bitrix\Sale\Delivery\Services;
 $res = Services\Manager::add($fields);
 
