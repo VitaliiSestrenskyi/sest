@@ -53,7 +53,7 @@ if (!empty($arID))
 $orderItems = '';
 foreach ($arBasketItems as $key => $value) 
 {
-	$orderItems .= '<a href="http://oniks-online.com.ua/'.$value["DETAIL_PAGE_URL"].'">'.$value["NAME"].'</a><br/>';
+	$orderItems .= '<a href="http://xxxx.com.ua/'.$value["DETAIL_PAGE_URL"].'">'.$value["NAME"].'</a><br/>';
 }
 	 
 ?>
